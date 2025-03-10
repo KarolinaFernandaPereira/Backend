@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { PrincipalService } from './principal.service';
 import { PrincipalDTO } from './dto/principal.dto';
 import { Principal } from '@prisma/client';
+import { get } from 'http';
 
 @Controller('principal')
 export class PrincipalController {
@@ -19,4 +20,29 @@ export class PrincipalController {
     return this.principalService.getAll()
   }
 
+  @Get('listarProd')
+  listarV2():Promise<any> {
+    return this.principalService.getAll_V2()
+  }
+
+  @Get('volume')
+  volume():Promise<any> {
+    return this.principalService.volume()
+  }
+
+  @Get('agressao')
+  agressao():Promise<any> {
+    return this.principalService.agressao()
+  }
+
+  @Get('distri')
+  distriVolume():Promise<any> {
+    return this.principalService.distribuicao_volume()
+  }
+
+  @Get('distriCompra')
+  distriCompra():Promise<any> {
+    return this.principalService.distribuicao_compra()
+  }
+  
 }

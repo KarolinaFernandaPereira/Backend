@@ -18,6 +18,11 @@ export class ProdutoController {
     return this.produtoService.getAll()
   }
 
+  @Get('teste')
+  teste():Promise<any> {
+    return this.produtoService.testeToast()
+  }
+
   @Delete('deletar/:id')
   deletar(@Param('id') id: string):Promise<any> {
     return this.produtoService.delete(id)

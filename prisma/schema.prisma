@@ -15,7 +15,7 @@ datasource db {
 
 model Principal {
   id Int @id @default(autoincrement())
-  produto Produto?
+  
 
   dataHora String
   quantidadeHora String
@@ -26,6 +26,9 @@ model Principal {
   tipoContrato String
   tendencia String?
   status String
+
+  produto Produto?  @relation(fields: [produtoId], references:[id])
+  produtoId Int?
 }
 
 model Produto {
@@ -37,6 +40,6 @@ model Produto {
   dataFinal String?
   tipo String
 
-  principal Principal?  @relation(fields: [principalId], references:[id])
-  principalId Int? @unique
+  principal Principal[]
+
 }

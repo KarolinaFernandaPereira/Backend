@@ -8,10 +8,8 @@ export class ProdutoService {
 
     async create(data: ProdutoDTO) {
 
-        const teste = parseInt(data.principalId)
-        
         const res = await this.prisma.produto.create({
-            data: {...data, principalId: teste}
+            data: {...data}
         })
 
         return res
@@ -21,6 +19,10 @@ export class ProdutoService {
         const res = await this.prisma.produto.findMany()
 
         return res
+    }
+
+    async testeToast(){
+        return "Brabo"
     }
 
     async delete(ID: string){

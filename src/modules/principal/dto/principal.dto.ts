@@ -17,4 +17,6 @@ export class PrincipalDTO {
   tendencia: string
   
   status: string
+
+  produtoId: string
 }

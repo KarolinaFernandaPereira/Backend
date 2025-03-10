@@ -12,5 +12,4 @@ export class ProdutoDTO {
 
     tipo: string
 
-    principalId: string
 }
