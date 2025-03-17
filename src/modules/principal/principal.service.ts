@@ -229,4 +229,19 @@ export class PrincipalService {
 
         return resultado_final
     }
+
+    async bloxPlot() {
+        const res = await this.prisma.principal.findMany({
+            select: {
+                quantidadeHora: true,
+            },
+            where: {
+                produtoId: 1
+            }
+        })
+
+        const volumes = res.map(item => parseInt(item.quantidadeHora));
+
+        return volumes
+    }
 }

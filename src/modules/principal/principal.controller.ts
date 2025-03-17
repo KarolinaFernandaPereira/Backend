@@ -44,5 +44,10 @@ export class PrincipalController {
   distriCompra():Promise<any> {
     return this.principalService.distribuicao_compra()
   }
+
+  @Get('bloxplot')
+  blox():Promise<any> {
+    return this.principalService.bloxPlot()
+  }
   
 }
