@@ -236,12 +236,74 @@ export class PrincipalService {
                 quantidadeHora: true,
             },
             where: {
-                produtoId: 1
+                produtoId: 4
             }
         })
 
         const volumes = res.map(item => parseInt(item.quantidadeHora));
 
         return volumes
+    }
+
+    async volumePrice(filtroA: any) {
+        
+        const tar = JSON.parse(filtroA.query)
+
+        console.log(tar)
+
+        
+        const res = await this.prisma.principal.findMany({
+            select: {
+                preco: true,
+            },
+
+            where: {
+                produtoId: 5
+            }
+           
+        })
+
+        
+
+        console.log()
+        const datasUnicas = [...new Set(res.map(r => r.preco))];
+
+        var resultado_final : any = []
+        
+        resultado_final = await Promise.all(
+            datasUnicas.map( async (item) => {
+                const venda = await this.prisma.principal.findMany({
+                    where: {
+                        
+                        preco: item,
+
+                        tendencia: 'Venda'
+                        
+                    },
+                })  
+
+                const compra = await this.prisma.principal.findMany({
+                    where: {
+                        
+                        preco: item,
+
+                        tendencia: 'Compra'
+                        
+                    },
+                }) 
+
+                
+
+                return {
+                    'preco': item,
+                    'compra': (await compra).length,
+                    'venda': (await venda).length,
+                }
+
+                
+            })
+        )
+
+        return resultado_final
     }
 }

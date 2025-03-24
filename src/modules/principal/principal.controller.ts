@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { PrincipalService } from './principal.service';
 import { PrincipalDTO } from './dto/principal.dto';
 import { Principal } from '@prisma/client';
@@ -48,6 +48,13 @@ export class PrincipalController {
   @Get('bloxplot')
   blox():Promise<any> {
     return this.principalService.bloxPlot()
+  }
+
+  @Get('volumePrice')
+  volumePrice(@Query() filtroA ):Promise<any> {
+    
+      
+    return this.principalService.volumePrice(filtroA)
   }
   
 }
