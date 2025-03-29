@@ -249,7 +249,110 @@ export class PrincipalService {
         
         const tar = JSON.parse(filtroA.query)
 
+        
+        
+
         console.log(tar)
+
+        if(Object.keys(tar).length != 0){
+            var submercadoCodes
+            var periodicidadeCode
+            var tipoCode
+            var contrato
+            var energiaCode
+
+            if(tar.filtroUse.submercado){
+                submercadoCodes = tar.filtroUse.submercado.map(submercado => submercado.code);
+            }
+
+            if(tar.filtroUse.periodicidade){
+                periodicidadeCode = tar.filtroUse.periodicidade.code;
+            }
+
+            if(tar.filtroUse.tipo){
+                tipoCode = tar.filtroUse.tipo.map(tipo => tipo.code);
+            }
+
+            if(tar.filtroUse.contrato){
+                contrato = tar.filtroUse.contrato.code
+            }
+
+            if(tar.filtroUse.energia){
+                energiaCode = tar.filtroUse.energia.map(energia => energia.code)
+            }
+
+            
+            console.log(tipoCode)
+            const filtrado = await this.prisma.produto.findMany({
+                where: {
+                    energia: {
+                        in: energiaCode
+                    },
+                    periodicidade: periodicidadeCode,
+                    tipo: {
+                        in: tipoCode
+                    }
+                }
+            })
+
+            
+            
+            const resID = filtrado.map(item => item.id);
+
+            console.log(resID)
+            const res = await this.prisma.principal.findMany({
+                select: {
+                    preco: true,
+                },
+    
+                where: {
+                    produtoId: {
+                        in: resID
+                    }
+                }
+               
+            })
+
+            var resultado_final : any = []
+            const datasUnicas = [...new Set(res.map(r => r.preco))];
+
+            resultado_final = await Promise.all(
+                datasUnicas.map( async (item) => {
+                    const venda = await this.prisma.principal.findMany({
+                        where: {
+                            
+                            preco: item,
+    
+                            tendencia: 'Venda'
+                            
+                        },
+                    })  
+    
+                    const compra = await this.prisma.principal.findMany({
+                        where: {
+                            
+                            preco: item,
+    
+                            tendencia: 'Compra'
+                            
+                        },
+                    }) 
+    
+                    
+    
+                    return {
+                        'preco': item,
+                        'compra': (await compra).length,
+                        'venda': (await venda).length,
+                    }
+    
+                    
+                })
+            )
+    
+            return resultado_final
+            
+        }
 
         
         const res = await this.prisma.principal.findMany({

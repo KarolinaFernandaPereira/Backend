@@ -41,5 +41,20 @@ model Produto {
   tipo String
 
   principal Principal[]
+}
 
+model Filtro {
+  id Int @id @default(autoincrement())
+
+  submercado String
+  tipo String
+  periodicidade String
+  dataInicial String
+  dataFinal String?
+  contrato String
+  energia String 
+
+  ativo Int
+  padrao Int
+  nome String
 }
