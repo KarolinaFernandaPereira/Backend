@@ -56,10 +56,72 @@ export class FiltroService {
     async getNome() {
         const res = await this.prisma.filtro.findMany({
             select: {
-                nome: true
+                nome: true,
+                padrao: true,
+                id: true
             }
         })
 
         return res
+    }
+
+    async getId(id: string){
+        const res = await this.prisma.filtro.findUnique({
+            where: {
+                id: parseInt(id)
+            }
+        })
+
+        return res
+    }
+
+    async favoritar(id: string){
+        const res1 = await this.prisma.filtro.findMany({
+            where: {
+                padrao: 1
+                
+            }
+        })
+
+        const idFavorito = res1[0].id
+        var res2
+
+        if(idFavorito != parseInt(id)){
+            await this.prisma.filtro.update({
+                where: {id: idFavorito},
+                data: {padrao: 0}
+            })
+
+            res2 = await this.prisma.filtro.update({
+                where: {id: parseInt(id)},
+                data: {padrao: 1}
+            })
+        }
+
+
+        return res2
+    }
+
+    async padrao(){
+        const res = await this.prisma.filtro.findMany({
+            where: {
+                padrao: 1
+            }
+        })
+
+        return res[0]
+    }
+
+    async delete(id: string){
+        
+
+        return await this.prisma.filtro.delete({
+            where: {
+                id: parseInt(id)
+            }
+        })
+
+
+
     }
 }

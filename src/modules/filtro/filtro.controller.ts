@@ -1,7 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 import { FiltroService } from './filtro.service';
 import { FiltroDTO } from './dto/filtro.dto';
-import { Filtro } from '@prisma/client';
 
 @Controller('filtro')
 export class FiltroController {
@@ -15,5 +14,25 @@ export class FiltroController {
   @Get('listar')
   listar(){
     return this.filtroService.getNome()
+  }
+
+  @Get('list/')
+  getId(@Query('id') id: string){
+    return this.filtroService.getId(id)
+  }
+
+  @Get('favoritar/')
+  favoritar(@Query('id') id: string){
+    return this.filtroService.favoritar(id)
+  }
+
+  @Get('padrao')
+  padrao(){
+    return this.filtroService.padrao()
+  }
+
+  @Delete('deletar/')
+    deletar(@Query('id') id: string){
+      return this.filtroService.delete(id)
   }
 }
