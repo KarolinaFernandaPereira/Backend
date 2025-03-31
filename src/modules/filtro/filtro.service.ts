@@ -76,27 +76,23 @@ export class FiltroService {
     }
 
     async favoritar(id: string){
-        const res1 = await this.prisma.filtro.findMany({
-            where: {
-                padrao: 1
-                
+        const res1 = await this.prisma.filtro.updateMany({
+            data: {
+                padrao: 0
             }
         })
 
-        const idFavorito = res1[0].id
-        var res2
+        const res2 = await this.prisma.filtro.update({
+            where: {
+                id: parseInt(id)
+            },
+            data: {
+                padrao: 1
+            }
+            
+        })
 
-        if(idFavorito != parseInt(id)){
-            await this.prisma.filtro.update({
-                where: {id: idFavorito},
-                data: {padrao: 0}
-            })
-
-            res2 = await this.prisma.filtro.update({
-                where: {id: parseInt(id)},
-                data: {padrao: 1}
-            })
-        }
+        
 
 
         return res2
@@ -109,6 +105,10 @@ export class FiltroService {
             }
         })
 
+        if(res.length == 0){
+            return "Nada Cadastrado"
+        }
+        
         return res[0]
     }
 
