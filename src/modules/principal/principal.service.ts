@@ -409,4 +409,143 @@ export class PrincipalService {
 
         return resultado_final
     }
+
+    async preco(){
+        const res = await this.prisma.principal.findMany({
+            select: {
+                dataHora: true,
+                preco: true
+            },
+        })
+
+        const datasUnicas = [...new Set(res.map(r => r.dataHora.split(" ")[0]))];
+        const precosUnicos = [...new Set(res.map(r => r.preco))];
+
+        var volumes1
+        var precos1
+        var datasUnicas1
+
+        var resultado_final : any = []
+        var testeFinal: any = []
+        resultado_final = await Promise.all(
+            datasUnicas.map( async (item) => {
+                const venda = await this.prisma.principal.findMany({
+                    where: {
+
+                        dataHora: {
+                            startsWith: item
+                        },
+
+                        tendencia: "Venda"
+
+                    },
+
+                    select: {
+                        quantidadeHora: true,
+                        dataHora: true,
+                        preco: true
+                    },
+
+                    take: 21
+                })  
+
+                console.log(venda)
+
+                var cont = 1
+                var vendaFinal: any = []
+                
+
+
+                venda.map((item) => {
+                    cont = cont + 1
+
+                    vendaFinal.push(cont);
+                    vendaFinal.push(item.preco);
+                    vendaFinal.push(parseInt(item.quantidadeHora) * 900000);
+                    vendaFinal.push("Venda")
+
+                    testeFinal.push(vendaFinal)
+
+                    vendaFinal = []
+
+                })
+                
+                cont = 0
+
+
+            })
+        )
+        
+        
+        return testeFinal
+    }
+
+    async preco_Compra() {
+        const res = await this.prisma.principal.findMany({
+            select: {
+                dataHora: true,
+                preco: true
+            },
+        })
+
+        const datasUnicas = [...new Set(res.map(r => r.dataHora.split(" ")[0]))];
+        const precosUnicos = [...new Set(res.map(r => r.preco))];
+
+        var volumes1
+        var precos1
+        var datasUnicas1
+
+        var resultado_final : any = []
+        var testeFinal: any = []
+
+        resultado_final = await Promise.all(
+            datasUnicas.map( async (item) => {
+                const venda = await this.prisma.principal.findMany({
+                    where: {
+
+                        dataHora: {
+                            startsWith: item
+                        },
+
+                        tendencia: "Compra"
+                    },
+
+                    select: {
+                        quantidadeHora: true,
+                        dataHora: true,
+                        preco: true
+                    },
+                    take: 21
+                })  
+
+                console.log(venda)
+
+                var cont = 1
+                var vendaFinal: any = []
+                
+
+
+                venda.map((item) => {
+                    cont = cont + 1
+                    vendaFinal.push(cont);
+                    vendaFinal.push(item.preco);
+                    vendaFinal.push(parseInt(item.quantidadeHora) * 900000);
+                    vendaFinal.push("Compra")
+
+                    testeFinal.push(vendaFinal)
+
+                    vendaFinal = []
+
+                })
+
+                cont = 0
+
+
+
+            })
+        )
+        
+        
+        return testeFinal
+    }
 }

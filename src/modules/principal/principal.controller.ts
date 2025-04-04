@@ -56,5 +56,15 @@ export class PrincipalController {
       
     return this.principalService.volumePrice(filtroA)
   }
+
+  @Get('preco')
+  preco():Promise<any> {
+    return this.principalService.preco()
+  }
+
+  @Get('preco_compra')
+  precoCompra():Promise<any> {
+    return this.principalService.preco_Compra()
+  }
   
 }
