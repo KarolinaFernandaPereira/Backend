@@ -1,7 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { ProdutoService } from './produto.service';
 import { ProdutoDTO } from './dto/produto.dto';
 import { Produto } from '@prisma/client';
+import { FileInterceptor } from '@nestjs/platform-express';
+import multerConfig from 'src/multer.config';
 
 @Controller('produto')
 export class ProdutoController {
@@ -26,6 +28,15 @@ export class ProdutoController {
   @Delete('deletar/:id')
   deletar(@Param('id') id: string):Promise<any> {
     return this.produtoService.delete(id)
+  }
+
+  @Post('arquivo')
+  @UseInterceptors(FileInterceptor('arquivo', multerConfig))
+  uploadArquivo(
+    @UploadedFile() file: Express.Multer.File,
+    @Req() req: Request,
+  ) {
+    return this.produtoService.upload(file, req);
   }
 
 }
