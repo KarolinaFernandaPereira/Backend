@@ -251,8 +251,7 @@ export class PrincipalService {
 
         
         
-
-        console.log(tar)
+        
 
         if(Object.keys(tar).length != 0){
             var submercadoCodes
@@ -295,6 +294,7 @@ export class PrincipalService {
                 }
             })
 
+            console.log(filtrado)
             
             
             const resID = filtrado.map(item => item.id);

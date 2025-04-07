@@ -139,7 +139,9 @@ export class ProdutoService {
                 produtoId: produtoCadastro.id,
             }
 
-            
+            await this.prisma.principal.create({
+                data: dataPrincipal
+            })
             
         }
 
