@@ -57,6 +57,9 @@ model Filtro {
   ativo Int
   padrao Int
   nome String
+
+  usuario Usuario?  @relation(fields: [userId], references:[id])
+  userId Int?
 }
 
 model Usuario {
@@ -67,4 +70,6 @@ model Usuario {
   senha String
 
   admin Int
+
+  filtro Filtro[]
 }

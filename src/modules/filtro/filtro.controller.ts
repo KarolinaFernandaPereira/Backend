@@ -12,8 +12,8 @@ export class FiltroController {
   }
 
   @Get('listar')
-  listar(){
-    return this.filtroService.getNome()
+  listar(@Query('id') id: string){
+    return this.filtroService.getNome(id)
   }
 
   @Get('list/')
@@ -26,9 +26,9 @@ export class FiltroController {
     return this.filtroService.favoritar(id)
   }
 
-  @Get('padrao')
-  padrao(){
-    return this.filtroService.padrao()
+  @Get('padrao/')
+  padrao(@Query('id') id: string){
+    return this.filtroService.padrao(id)
   }
 
   @Delete('deletar/')

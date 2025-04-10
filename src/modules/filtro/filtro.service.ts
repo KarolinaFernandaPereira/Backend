@@ -24,7 +24,23 @@ export class FiltroService {
 
         const energiaFiltro = concatRegionCode(data.energia)
 
-        const filtroPadrao = data.padrao
+        const res = await this.prisma.filtro.findMany({
+            where: {
+                userId: parseInt(data.userId)
+            }
+        })
+        
+        var filtroPadrao
+
+        if(res.length != 0){
+            
+            filtroPadrao = 0
+        } else {
+            filtroPadrao = 1
+        }
+        console.log(filtroPadrao)
+        
+        const filtroUser = data.userId
 
         const dataIniFiltro = data.dataIni
         const dataFinFiltro = data.dataFin
@@ -42,6 +58,7 @@ export class FiltroService {
             'dataInicial': dataIniFiltro,
             'dataFinal': dataFinFiltro,
             'periodicidade': periodicidadeFiltro,
+            'userId': filtroUser
         }
 
         await this.prisma.filtro.create({data: finalData})
@@ -53,13 +70,19 @@ export class FiltroService {
 
     }
 
-    async getNome() {
+    async getNome(id: string) {
         const res = await this.prisma.filtro.findMany({
+            where: {
+                userId: parseInt(id),
+            },
+
             select: {
                 nome: true,
                 padrao: true,
                 id: true
-            }
+            },
+
+
         })
 
         return res
@@ -97,18 +120,31 @@ export class FiltroService {
         return res2
     }
 
-    async padrao(){
-        const res = await this.prisma.filtro.findMany({
-            where: {
-                padrao: 1
-            }
-        })
+    async padrao(id: string){
 
-        if(res.length == 0){
-            return "Nada Cadastrado"
+
+        if(id.length != 0){
+
+            const res = await this.prisma.filtro.findMany({
+                where: {
+                    padrao: 1,
+                    userId: parseInt(id)
+                }
+            })
+
+            if(res.length == 0){
+                return "Nada Cadastrado"
+            }
+            
+            return res[0]
+
+
+        } else {
+
+            return 'Nada Cadastrado'
         }
+
         
-        return res[0]
     }
 
     async delete(id: string){
