@@ -15,4 +15,17 @@ const multerConfig = {
   }),
 };
 
-export default multerConfig;
+const multerConfig2 = {
+  storage: diskStorage({
+    destination: './profiles/files',
+    filename: (req, file, cb) => {
+      const fileName =
+        path.parse(file.originalname).name.replace(/\s/g, '') + '-' + uuidv4();
+
+      const extension = path.parse(file.originalname).ext;
+      cb(null, `${fileName}${extension}`);
+    },
+  }),
+};
+
+export default multerConfig; multerConfig2;

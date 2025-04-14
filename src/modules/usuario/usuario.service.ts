@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { LoginDTO, UserDTO } from './dto/user.dto';
-import { log } from 'console';
+
+import { File } from 'buffer';
 
 @Injectable()
 export class UsuarioService {
@@ -39,5 +40,27 @@ export class UsuarioService {
         
 
 
+    }
+
+    async upload(file: Express.Multer.File, req: Request, id: string) {
+        const base = process.cwd()
+        
+        const url = `http://localhost:3030/files/${file.filename}`
+
+        const user = this.prisma.usuario.update({
+            where: {
+                id: parseInt(id)
+            },
+
+            data: {
+                avatar: url
+            }
+        })
+
+
+        return user
+
+
+        
     }
 }

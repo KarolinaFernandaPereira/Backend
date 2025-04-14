@@ -71,5 +71,7 @@ model Usuario {
 
   admin Int
 
+  avatar String?
+
   filtro Filtro[]
 }
