@@ -123,7 +123,7 @@ export class FiltroService {
     async padrao(id: string){
 
 
-        if(id.length != 0){
+        if(id != null){
 
             const res = await this.prisma.filtro.findMany({
                 where: {
